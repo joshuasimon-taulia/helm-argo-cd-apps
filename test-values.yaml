@@ -1,0 +1,103 @@
+# This file is created from the jx-requirements.yml and jx-global-values.yaml files.
+# For more information see: https://jenkins-x.io/v3/develop/apps/#using-requirements-in-charts
+jx:
+  imagePullSecrets: []
+  pipelineVariables: {}
+  releaseCRD: true
+  secrets:
+    adminUser:
+      password: todo
+      username: todo
+    hmacToken: todo
+    pipelineUser:
+      email: jenkins-x@googlegroups.com
+      token: todo
+      username: gitops-labs-bot
+jxRequirements:
+  autoUpdate:
+    autoMerge: true
+    enabled: true
+    schedule: 0 0 * * *
+  cluster:
+    chartRepository: https://bucketrepo-jx.dev.my-org.com/bucketrepo/charts
+    clusterName: dev
+    devEnvApprovers:
+    - joshuasimon-taulia
+    dockerRegistryOrg: my-gcp-project
+    environmentGitOwner: my-org
+    gitKind: github
+    gitName: github
+    gitServer: https://github.com
+    gke:
+      projectNumber: "123456789"
+    kanikoFlags: --skip-unused-stages --snapshotMode=redo
+    project: my-org-dev
+    provider: gke
+    registry: gcr.io
+    zone: us-central1
+  environments:
+  - key: dev
+    owner: my-org
+    repository: gitops-dev
+  - ingress:
+      domain: dev.my-org.com
+      externalDNS: true
+      namespaceSubDomain: .
+      tls:
+        email: trolol@my-org.com
+        enabled: true
+        production: true
+        secretName: tls-dev-my-org-com-p
+    key: staging
+    namespace: staging
+  - gitKind: github
+    gitServer: https://github.com
+    key: atlantis
+    owner: my-org
+    promotionStrategy: Never
+    remoteCluster: true
+    repository: gitops-atlantis
+  - gitKind: github
+    gitServer: https://github.com
+    key: remote-production
+    owner: my-org
+    promotionStrategy: Never
+    remoteCluster: true
+    repository: gitops-remote-production
+  ingress:
+    domain: dev.my-org.com
+    externalDNS: true
+    kind: ingress
+    namespaceSubDomain: -jx.
+    tls:
+      email: trolol@my-org.com
+      enabled: true
+      production: true
+      secretName: tls-dev-my-org-com-p
+  kuberhealthy: true
+  pipelineUser:
+    email: botzzz@my-org.com
+    username: botzzz
+  repository: bucketrepo
+  secretStorage: gsm
+  storage:
+  - name: backup
+    url: gs://backup-dev-1234
+  - name: logs
+    url: gs://logs-dev-1234
+  - name: reports
+    url: gs://reports-dev-1234
+  - name: repository
+    url: gs://repository-dev-1234
+  vault: {}
+  webhook: lighthouse
+jxRequirementsIngressExternalDNS:
+  enabled: true
+jxRequirementsIngressTLS:
+  enabled: true
+jxRequirementsKuberhealthy:
+  enabled: true
+jxRequirementsTLSCheck:
+  enabled: true
+jxRequirementsVault:
+  enabled: false

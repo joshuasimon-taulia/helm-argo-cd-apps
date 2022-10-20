@@ -1,0 +1,7 @@
+apiVersion: core.jenkins-x.io/v4beta1
+kind: Settings
+spec:
+  promoteEnvironments:
+  - key: dev
+    namespace: argocd
+    promotionStrategy: Auto

@@ -1,0 +1,48 @@
+{{ range $idx, $environment := .Values.jxRequirements.environments }}
+{{- $gitServer := $environment.gitServer | default $.Values.jxRequirements.cluster.gitServer }}
+{{- if $environment.repository }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ $environment.key }}
+spec:
+  generators:
+  - git:
+      repoURL: {{ $gitServer }}/{{ $environment.owner }}/{{ $environment.repository }}
+      revision: HEAD
+      directories:
+      - path: helmfiles/*
+  template:
+    metadata:
+      name: '{{`{{path.basename}}`}}'
+    spec:
+      project: {{ $environment.key }}
+      source:
+        repoURL: {{ $gitServer }}/{{ $environment.owner }}/{{ $environment.repository }}
+        targetRevision: HEAD
+        path: '{{`{{path}}`}}'
+        plugin:
+          env:
+          # required because we have hardcoded namespaces in each helmfile
+          - name: HELMFILE_USE_CONTEXT_NAMESPACE
+            value: "true"
+          - name: HELM_TEMPLATE_OPTIONS
+            value: --skip-tests
+          name: helmfile
+      destination:
+      {{- if $environment.remoteCluster }}
+        server: {{ $environment.url }}
+      {{- else }}
+        server: https://kubernetes.default.svc
+      {{- end }}
+        namespace: '{{`{{path.basename}}`}}'
+      syncPolicy:
+      {{- with $.Values.syncPolicy }}
+        {{ . | toYaml | nindent 8 | trim }}
+      {{- end }}
+    {{- with $.Values.extraConfig }}
+      {{ . | toYaml | nindent 6 | trim }}
+    {{- end }}
+{{ end }}
+{{ end }}

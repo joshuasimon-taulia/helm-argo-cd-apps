@@ -1,0 +1,2 @@
+1. Get the argo-cd-apps service URL by running these commands:
+k get svc -l app=argo-cd-apps

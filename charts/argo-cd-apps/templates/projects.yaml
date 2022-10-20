@@ -1,0 +1,34 @@
+{{ range $idx, $environment := .Values.jxRequirements.environments }}
+{{- $clusterResourceWhitelist := $environment.clusterResourceWhitelist | default $.Values.projects.clusterResourceWhitelist }}
+{{- $gitServer := $environment.gitServer | default $.Values.jxRequirements.cluster.gitServer }}
+{{- if $environment.repository }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ $environment.key }}
+spec:
+  sourceRepos:
+  - {{ $gitServer }}/{{ $environment.owner }}/{{ $environment.repository }}
+  destinations:
+  # - namespace: '!kube-system'
+  - namespace: '*'
+  {{- if $environment.remoteCluster }}
+    server: {{ $environment.url }}
+  {{- else }}
+    server: https://kubernetes.default.svc
+  {{- end }}
+  clusterResourceWhitelist:
+  {{- with $clusterResourceWhitelist }}
+    {{ . | toYaml | nindent 4 | trim }}
+  {{- end }}
+  # roles:
+  # # A role which provides read-only access to all applications in the project
+  # - name: read-only
+  #   description: Read-only privileges to my-project
+  #   policies:
+  #   - p, proj:my-project:read-only, applications, get, my-project/*, allow
+  #   groups:
+  #   - my-oidc-group
+{{ end }}
+{{ end }}

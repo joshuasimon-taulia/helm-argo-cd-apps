@@ -1,0 +1,20 @@
+project:
+  name: argo-cd-apps
+  shortName: argo-cd-apps
+  url: https://github.com/argoproj
+  description: using argo-cd
+  app: argo-cd-apps k8s custom resources
+repository:
+  url: https://jenkins-x-charts.github.io/repo
+  name: joshuasimon
+chart:
+  name: argo-cd-apps
+  version: v0.1.0
+  values: "-- generate from values file --"
+  valuesExample: "-- generate from values file --"
+prerequisites:
+  - "Kubernetes v1.21+"
+  - "install the [argo-cd](https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd) chart"
+release:
+  name: argo-cd-apps
+  namespace: argocd

@@ -1,0 +1,30 @@
+## Directory-based project format:
+.idea/
+
+## osx
+**/.DS_Store
+**/.DS_Store?
+**/._*
+**/.Spotlight-V100
+**/.Trashes
+**/ehthumbs.db
+**/Thumbs.db
+
+# helm
+Chart.lock
+**/charts/*.tgz
+**/output/*
+**/*requirements.lock
+**/*Chart.lock
+# Except this file
+!.gitignore
+
+# helmfile
+# this cache directory causes issues using remote charts
+.helmfile
+
+# Python
+**/*.pyc
+
+# Test results
+**/results.xml
